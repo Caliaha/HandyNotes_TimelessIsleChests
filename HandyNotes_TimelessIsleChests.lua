@@ -55,7 +55,48 @@ chests[33209] = 54007820
 chests[33210] = 47602760
 -- Coords End
 
-TimelessIsleChest.data = chests
+local info = { }
+info[36703410] = { "Moss-Covered Chest", "One-Time Chest 000" }
+info[25502720] = { "Moss-Covered Chest", "One-Time Chest 001" }
+info[27403910] = { "Moss-Covered Chest", "One-Time Chest 002" }
+info[30703650] = { "Moss-Covered Chest", "One-Time Chest 003" }
+info[22403540] = { "Moss-Covered Chest", "One-Time Chest 004" }
+info[22104930] = { "Moss-Covered Chest", "One-Time Chest 005" }
+info[24805300] = { "Moss-Covered Chest", "One-Time Chest 006" }
+info[25704580] = { "Moss-Covered Chest", "One-Time Chest 007" }
+info[22306810] = { "Moss-Covered Chest", "One-Time Chest 008" }
+info[26806870] = { "Moss-Covered Chest", "One-Time Chest 009" }
+info[31007630] = { "Moss-Covered Chest", "One-Time Chest 010" }
+info[35307640] = { "Moss-Covered Chest", "One-Time Chest 011" }
+info[38707160] = { "Moss-Covered Chest", "One-Time Chest 012" }
+info[39807950] = { "Moss-Covered Chest", "One-Time Chest 013" }
+info[34808420] = { "Moss-Covered Chest", "One-Time Chest 014" }
+info[43608410] = { "Moss-Covered Chest", "One-Time Chest 015" }
+info[47005370] = { "Moss-Covered Chest", "One-Time Chest 016" }
+info[46704670] = { "Moss-Covered Chest", "One-Time Chest 017" }
+info[51204570] = { "Moss-Covered Chest", "One-Time Chest 018" }
+info[55504430] = { "Moss-Covered Chest", "One-Time Chest 019" }
+info[58005070] = { "Moss-Covered Chest", "One-Time Chest 020" }
+info[65704780] = { "Moss-Covered Chest", "One-Time Chest 021" }
+info[63805920] = { "Moss-Covered Chest", "One-Time Chest 022" }
+info[64907560] = { "Moss-Covered Chest", "One-Time Chest 023" }
+info[60206600] = { "Moss-Covered Chest", "One-Time Chest 024" }
+info[49706570] = { "Moss-Covered Chest", "One-Time Chest 025" }
+info[53107080] = { "Moss-Covered Chest", "One-Time Chest 026" }
+info[52706270] = { "Moss-Covered Chest", "One-Time Chest 027" }
+info[61708850] = { "Moss-Covered Chest", "One-Time Chest 028" }
+info[44206530] = { "Moss-Covered Chest", "One-Time Chest - Stump Center" }
+info[26006140] = { "Moss-Covered Chest", "One-Time Chest - Stump SW Shore" }
+info[24603850] = { "Moss-Covered Chest", "One-Time Chest - Stump West" }
+info[29703180] = { "Moss-Covered Chest", "One-Time Chest - Steam Shore" }
+info[29703180] = { "Moss-Covered Chest", "One-Time Chest - Ordo Lake Lower" }
+info[28203520] = { "Sturdy Chest", "One-Time Chest - Carry Bird 1" }
+info[26806490] = { "Sturdy Chest", "One-Time Chest - Carry Bird 2" }
+info[64607040] = { "Sturdy Chest", "One-Time Chest - Gulp Frogs" }
+info[59204950] = { "Sturdy Chest", "One-Time Chest - Hammer Cavern" }
+info[69503290] = { "Smoldering Chest", "One-Time Chest - Ordo Chest 000" }
+info[54007820] = { "Smoldering Chest", "One-Time Chest - Ordo Chest 001" }
+info[47602760] = { "Blazing Chest", "One-Time Chest - Blazing Chest" }
 
 function TimelessIsleChest:OnInitialize()
  local defaults = {
@@ -100,11 +141,29 @@ do
 	end
 end
 
-function handler:OnEnter(mapFile, coord)
- --print(mapFile, coord)
+function handler:OnEnter(mapFile, coord) -- Copied from handynotes
+    if (not info[coord]) then return end
+	
+	local tooltip = self:GetParent() == WorldMapButton and WorldMapTooltip or GameTooltip
+	if ( self:GetCenter() > UIParent:GetCenter() ) then -- compare X coordinate
+		tooltip:SetOwner(self, "ANCHOR_LEFT")
+	else
+		tooltip:SetOwner(self, "ANCHOR_RIGHT")
+	end
+
+	tooltip:SetText(info[coord][1])
+	if (info[coord][2] ~= nil) then
+	 tooltip:AddLine(info[coord][2], nil, nil, nil, true)
+	end
+	tooltip:Show()
 end
 
 function handler:OnLeave(mapFile, coord)
+	if self:GetParent() == WorldMapButton then
+		WorldMapTooltip:Hide()
+	else
+		GameTooltip:Hide()
+	end
 end
 
 function module:OnInitialize()
