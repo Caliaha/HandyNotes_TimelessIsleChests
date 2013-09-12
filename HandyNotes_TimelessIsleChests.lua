@@ -1,4 +1,4 @@
-TimelessIsleChest = LibStub("AceAddon-3.0"):NewAddon("TimelessIsleChest", "AceBucket-3.0", "AceConsole-3.0")
+TimelessIsleChest = LibStub("AceAddon-3.0"):NewAddon("TimelessIsleChest", "AceBucket-3.0", "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
 
 local HandyNotes = LibStub("AceAddon-3.0"):GetAddon("HandyNotes", true)
 if not HandyNotes then return end
