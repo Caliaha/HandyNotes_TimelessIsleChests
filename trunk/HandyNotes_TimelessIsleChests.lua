@@ -58,20 +58,20 @@ nodes["TimelessIsle"][59903130] = { "33201", "Moss-Covered Chest", "One-Time Che
 
 -- Extreme Treasure Hunter
 nodes["TimelessIsle"][51607460] = { "32969", "Gleaming Treasure Chest", "Pillar Jumping\nStart Here", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" } --Old start 51507360
-nodes["TimelessIsle"][49706940] = { "32969", "Gleaming Treasure Chest", "Pillar Jumping\nExtreme Treasure Hunter", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][49706940] = { "32969", "Gleaming Treasure Chest", "Pillar Jumping\n|cffffff00[Extreme Treasure Hunter]|r", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
-nodes["TimelessIsle"][60204590] = { "32968", "Rope-Bound Treasure Chest", "Rope Walking\nStar Here", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" }
-nodes["TimelessIsle"][53904720] = { "32968", "Rope-Bound Treasure Chest", "Rope Walking\nExtreme Treasure Hunter", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][60204590] = { "32968", "Rope-Bound Treasure Chest", "Rope Walking\nStart Here", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" }
+nodes["TimelessIsle"][53904720] = { "32968", "Rope-Bound Treasure Chest", "Rope Walking\n|cffffff00[Extreme Treasure Hunter]|r", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
-nodes["TimelessIsle"][58506010] = { "32971", "Mist-Covered Treasure Chest", "Feather Falling\nExtreme Treasure Hunter\nClick on Gleaming Crane Statue\nRequires Gleaming Treasure Chest and Rope-Bound Treasure Chest to be looted first", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][58506010] = { "32971", "Mist-Covered Treasure Chest", "Feather Falling\n|cffffff00[Extreme Treasure Hunter]|r\nClick on Gleaming Crane Statue\nRequires Gleaming Treasure Chest and Rope-Bound Treasure Chest to be looted first", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
 -- Where There's Pirates, There's Booty
-nodes["TimelessIsle"][40409300] = { "32957", "Sunken Treasure", "Where There's Pirates, There's Booty\nKill nearby elites for the key", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][40409300] = { "32957", "Sunken Treasure", "|cffffff00[Where There's Pirates, There's Booty]|r\nKill nearby elites for the key", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
-nodes["TimelessIsle"][16905710] = { "32956", "Blackguard's Jetsam", "Where There's Pirates, There's Booty\nCave Entrance", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" }
-nodes["TimelessIsle"][22705890] = { "32956", "Blackguard's Jetsam", "Where There's Pirates, There's Booty\nChest in cave", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][16905710] = { "32956", "Blackguard's Jetsam", "Cave Entrance", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" }
+nodes["TimelessIsle"][22705890] = { "32956", "Blackguard's Jetsam", "|cffffff00[Where There's Pirates, There's Booty]|r\nChest in cave", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
-nodes["TimelessIsle"][70608090] = { "32970", "Gleaming Treasure Satchel", "Where There's Pirates, There's Booty\nIf you need help, check the comments on Wowhead.com", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
+nodes["TimelessIsle"][70608090] = { "32970", "Gleaming Treasure Satchel", "|cffffff00[Where There's Pirates, There's Booty]|r\nIf you need help, check the comments on Wowhead.com", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily_end.tga" }
 
 --[[ function TimelessIsleChest:OnEnable()
 end
@@ -86,7 +86,7 @@ do
 		local state, value = next(t, prestate)
 		while state do
 			    -- questid, chest type, quest name, icon
-			    if (value[1] and not IsQuestFlaggedCompleted(value[1])) then
+			    if (value[1] and (not IsQuestFlaggedCompleted(value[1]) or db.alwaysshow)) then
 				 --print(state)
 				 local icon = value[4] or iconDefault
 				 return state, nil, icon, db.icon_scale, db.icon_alpha
@@ -152,6 +152,13 @@ local options = {
    arg = "icon_alpha",
    order = 20,
   },
+  alwaysshow = {
+   type = "toggle",
+   name = "Show All Chests",
+   desc = "Always show every chest regardless of looted status",
+   arg = "alwaysshow",
+   order = 2,
+  },
  },
 }
 
@@ -160,6 +167,7 @@ function TimelessIsleChest:OnInitialize()
   profile = {
    icon_scale = 1.0,
    icon_alpha = 1.0,
+   alwaysshow = false,
   },
  }
 
