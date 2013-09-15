@@ -80,24 +80,7 @@ function TimelessIsleChest:OnDisable()
 end ]]--
 
 --local handler = {}
-do
-	local function iter(t, prestate)
-		if not t then return nil end
-		local state, value = next(t, prestate)
-		while state do
-			    -- questid, chest type, quest name, icon
-			    if (value[1] and (not IsQuestFlaggedCompleted(value[1]) or db.alwaysshow)) then
-				 --print(state)
-				 local icon = value[4] or iconDefault
-				 return state, nil, icon, db.icon_scale, db.icon_alpha
-				end
-			state, value = next(t, state)
-		end
-	end
-	function TimelessIsleChest:GetNodes(mapFile, isMinimapUpdate, dungeonLevel)
-		return iter, nodes[mapFile], nil
-	end
-end
+
 
 function TimelessIsleChest:OnEnter(mapFile, coord) -- Copied from handynotes
     if (not nodes[mapFile][coord]) then return end
@@ -172,11 +155,42 @@ function TimelessIsleChest:OnInitialize()
  }
 
  db = LibStub("AceDB-3.0"):New("TimelessIsleChestsDB", defaults, true).profile
- HandyNotes:RegisterPluginDB("TimelessIsleChest", self, options)
+ self:RegisterEvent("PLAYER_ENTERING_WORLD", "WorldEnter")
+end
+
+function TimelessIsleChest:WorldEnter()
+
  --self:RegisterEvent("WORLD_MAP_UPDATE", "Refresh")
  --self:RegisterEvent("LOOT_CLOSED", "Refresh")
- self:RegisterBucketEvent({ "WORLD_MAP_UPDATE", "LOOT_CLOSED" }, 2, "Refresh")
+
+ --self:Refresh()
+ self:ScheduleTimer("RegisterWithHandyNotes", 10)
 end
+
+function TimelessIsleChest:RegisterWithHandyNotes()
+do
+	local function iter(t, prestate)
+		if not t then return nil end
+		local state, value = next(t, prestate)
+		while state do
+			    -- questid, chest type, quest name, icon
+			    if (value[1] and (not IsQuestFlaggedCompleted(value[1]) or db.alwaysshow)) then
+				 --print(state)
+				 local icon = value[4] or iconDefault
+				 return state, nil, icon, db.icon_scale, db.icon_alpha
+				end
+			state, value = next(t, state)
+		end
+	end
+	function TimelessIsleChest:GetNodes(mapFile, isMinimapUpdate, dungeonLevel)
+		return iter, nodes[mapFile], nil
+	end
+end
+ HandyNotes:RegisterPluginDB("TimelessIsleChest", self, options)
+ self:RegisterBucketEvent({ "LOOT_CLOSED" }, 2, "Refresh")
+ self:Refresh()
+end
+ 
 
 function TimelessIsleChest:Refresh()
  self:SendMessage("HandyNotes_NotifyUpdate", "TimelessIsleChest")
