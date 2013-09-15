@@ -159,6 +159,7 @@ function TimelessIsleChest:OnInitialize()
 end
 
 function TimelessIsleChest:WorldEnter()
+ self:UnregisterEvent("PLAYER_ENTERING_WORLD")
 
  --self:RegisterEvent("WORLD_MAP_UPDATE", "Refresh")
  --self:RegisterEvent("LOOT_CLOSED", "Refresh")
