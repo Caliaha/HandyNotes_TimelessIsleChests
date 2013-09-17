@@ -11,6 +11,8 @@ TimelessIsleChest.nodes = { }
 local nodes = TimelessIsleChest.nodes
 
 nodes["TimelessIsle"] = { }
+nodes["CavernofLostSpirits"] = { }
+--nodes["Pandaria"] = { }
 
 nodes["TimelessIsle"][36703410] = { "33170", "Moss-Covered Chest", "One-Time Chest 000" }
 nodes["TimelessIsle"][25502720] = { "33171", "Moss-Covered Chest", "One-Time Chest 001" }
@@ -55,6 +57,11 @@ nodes["TimelessIsle"][54007820] = { "33209", "Smoldering Chest", "One-Time Chest
 nodes["TimelessIsle"][47602760] = { "33210", "Blazing Chest", "One-Time Chest - Blazing Chest" }
 
 nodes["TimelessIsle"][59903130] = { "33201", "Moss-Covered Chest", "One-Time Chest - Ordo Lake Lower" }  -- Needed Correction
+
+nodes["TimelessIsle"][46703230] = { "33203", "Skull-Covered Chest", "One-Time Chest - Cavern of Lost Spirits\nLocated inside the cave below" }
+nodes["CavernofLostSpirits"][62903480] = { "33203", "Skull-Covered Chest", "One-Time Chest - Cavern of Lost Spirits" }
+--nodes["Pandaria"][62903480] = { "33203", "Skull-Covered Chest", "One-Time Chest - Cavern of Lost Spirits" }
+
 
 -- Extreme Treasure Hunter
 nodes["TimelessIsle"][51607460] = { "32969", "Gleaming Treasure Chest", "Pillar Jumping\nStart Here", "Interface\\Addons\\HandyNotes_TimelessIsleChests\\Artwork\\chest_normal_daily.tga" } --Old start 51507360
@@ -184,6 +191,7 @@ do
 		end
 	end
 	function TimelessIsleChest:GetNodes(mapFile, isMinimapUpdate, dungeonLevel)
+	    if (mapFile == "CavernofLostSpirits" and isMinimapUpdate) then return iter, nodes["Hack"], nil end
 		return iter, nodes[mapFile], nil
 	end
 end
