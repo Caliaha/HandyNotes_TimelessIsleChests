@@ -4,7 +4,7 @@ local HandyNotes = LibStub("AceAddon-3.0"):GetAddon("HandyNotes", true)
 if not HandyNotes then return end
 
 --TimelessIsleChest = HandyNotes:NewModule("TimelessIsleChest", "AceConsole-3.0", "AceEvent-3.0")
-local db
+--local db
 local iconDefault = "Interface\\Icons\\TRADE_ARCHAEOLOGY_CHESTOFTINYGLASSANIMALS"
 
 TimelessIsleChest.nodes = { }
@@ -118,8 +118,8 @@ local options = {
  type = "group",
  name = "TimelessIsleChest",
  desc = "Locations of treasure chests on Timeless Isle.",
- get = function(info) return db[info.arg] end,
- set = function(info, v) db[info.arg] = v; TimelessIsleChest:Refresh() end,
+ get = function(info) return TimelessIsleChest.db.profile[info.arg] end,
+ set = function(info, v) TimelessIsleChest.db.profile[info.arg] = v; TimelessIsleChest:Refresh() end,
  args = {
   desc = {
    name = "These settings control the look and feel of the icon.",
@@ -149,6 +149,11 @@ local options = {
    arg = "alwaysshow",
    order = 2,
   },
+  save = {
+   type = "toggle",
+   name = "Save to SavedVariables",
+   arg = "save",
+  },
  },
 }
 
@@ -158,10 +163,11 @@ function TimelessIsleChest:OnInitialize()
    icon_scale = 1.0,
    icon_alpha = 1.0,
    alwaysshow = false,
+   save = false,
   },
  }
 
- db = LibStub("AceDB-3.0"):New("TimelessIsleChestsDB", defaults, true).profile
+ self.db = LibStub("AceDB-3.0"):New("TimelessIsleChestsDB", defaults, true)
  self:RegisterEvent("PLAYER_ENTERING_WORLD", "WorldEnter")
 end
 
@@ -182,10 +188,10 @@ do
 		local state, value = next(t, prestate)
 		while state do
 			    -- questid, chest type, quest name, icon
-			    if (value[1] and (not IsQuestFlaggedCompleted(value[1]) or db.alwaysshow)) then
+			    if (value[1] and not TimelessIsleChest:HasBeenLooted(value)) then
 				 --print(state)
 				 local icon = value[4] or iconDefault
-				 return state, nil, icon, db.icon_scale, db.icon_alpha
+				 return state, nil, icon, TimelessIsleChest.db.profile.icon_scale, TimelessIsleChest.db.profile.icon_alpha
 				end
 			state, value = next(t, state)
 		end
@@ -202,5 +208,24 @@ end
  
 
 function TimelessIsleChest:Refresh()
+ if (not self.db.profile.save) then
+  table.wipe(self.db.char)
+ end
  self:SendMessage("HandyNotes_NotifyUpdate", "TimelessIsleChest")
+end
+
+function TimelessIsleChest:HasBeenLooted(value)
+ if (self.db.profile.alwaysshow) then return false end
+ 
+ if (self.db.char[value[1]] and self.db.profile.save) then return true end
+ 
+ if (IsQuestFlaggedCompleted(value[1])) then
+  if (self.db.profile.save and not value[4]) then  -- Save the chest but not if it's a daily
+   self.db.char[value[1]] = true;
+  end
+  
+  return true
+ end
+  
+ return false
 end
