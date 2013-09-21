@@ -1,9 +1,10 @@
 ## Interface: 50400
 ## Title: HandyNotes_TimelessIsleChests
-## Version: 1.08
+## Version: @project-version@
 ## Notes: Shows location of treasure chests on the Timeless Isle
 ## Author: Bartruby of Cairne
-## OptionalDeps: Ace3, HandyNotes
+## OptionalDeps: Ace3
+## RequiredDeps: HandyNotes
 ## X-Embeds: Ace3
 ## SavedVariables: TimelessIsleChestsDB
 
