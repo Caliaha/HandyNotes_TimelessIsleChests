@@ -2,6 +2,7 @@ package-as: HandyNotes_TimelessIsleChests
 
 ignore:
  - .pkgmeta
+ - tools
 
 externals:
  libs/LibStub:
