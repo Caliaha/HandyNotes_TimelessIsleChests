@@ -1,4 +1,4 @@
-## Interface: 70200
+## Interface: 70300
 ## Title: HandyNotes_TimelessIsleChests
 ## Version: @project-version@
 ## Notes: Shows location of treasure chests on the Timeless Isle
