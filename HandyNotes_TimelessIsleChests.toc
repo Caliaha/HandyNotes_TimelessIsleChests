@@ -1,5 +1,5 @@
-## Interface: 90207
-## Title: HandyNotes_TimelessIsleChests
+## Interface: 100000
+## Title: HandyNotes: TimelessIsleChests
 ## Version: @project-version@
 ## Notes: Shows location of treasure chests on the Timeless Isle
 ## Author: Bartruby of Cairne
